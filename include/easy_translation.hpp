@@ -20,6 +20,11 @@
 
 #include <nlohmann/json.hpp>    // json
 
+/// @brief Define this macro to enable release mode, for better performance.
+/// @note If you not define this macro, the #TranslaeManager::translate() function will store
+/// all the translation text IDs in memory used for possible update the translation files.
+// #define EASY_TRANSLATION_RELEASE
+
 // - Translation function
 //   - Usage: EASYTR("Translation text ID")
 //   - Returns the translated text.
@@ -215,10 +220,10 @@ public:
         return TranslationList(list);
     }
 
-    /// @brief Get the translation text of the given text id.
-    /// @param textId The text id.
+    /// @brief Get the translation text of the given text ID.
+    /// @param textId The text ID.
     /// @return The translated text.
-    /// @note If the given text id doesn't exist, return the text id itself.
+    /// @note If the given text ID doesn't exist, return the text ID itself.
     const char* translationText(const std::string& textId) const
     {
         if (!has(textId))
@@ -232,7 +237,7 @@ public:
     /// @brief Check if the translation list is empty.
     bool isEmpty() const { return count() == 0; }
 
-    /// @brief Check if the given text id exists in the translation list.
+    /// @brief Check if the given text ID exists in the translation list.
     bool has(const std::string& textId) const { return translations_.find(textId) != translations_.end(); }
 
     /// @brief Write the translation list to a json file.
@@ -253,10 +258,10 @@ public:
         ofs.close();
     }
 
-    /// @brief Add a map of text id and translation text.
-    /// @param textId The text id.
+    /// @brief Add a map of text ID and translation text.
+    /// @param textId The text ID.
     /// @param text The translation text.
-    /// @note If the given text id already exists, do nothing.
+    /// @note If the given text ID already exists, do nothing.
     void add(const std::string& textId, const std::string& text)
     {
         if (has(textId))
@@ -266,7 +271,7 @@ public:
     }
 
     /// @brief Remove a translation.
-    /// @param textId The text id.
+    /// @param textId The text ID.
     void remove(const std::string& textId) { translations_.erase(textId); }
 
     /// @brief Remove all translations.
@@ -286,22 +291,31 @@ public:
         return instance;
     }
 
-    /// @brief Get the translation text of the given text id.
-    /// @param textId The text id.
+    /// @brief Get the translation text of the given text ID.
+    /// @param textId The text ID.
     /// @return The translated text.
-    /// @note If the given text id doesn't exist in the current language, return the text id itself.
+    /// @note If the given text ID doesn't exist in the current language, return the text ID itself.
 #ifdef EASY_TRANSLATION_RELEASE
     const char* translate(const std::string& textId) const
     {
         return translations_.translationText(textId);
     }
 #else
+    /// @brief Get the translation text of the given text ID.
+    /// @param textId The text ID.
+    /// @return The translated text.
+    /// @note If the given text ID doesn't exist in the current language, return the text ID itself.
     const char* translate(const std::string& textId)
     {
         textIds_.insert(textId);
         return translations_.translationText(textId);
     }
 
+    /// @brief Update the translation files by add new text IDs and a empty translation.
+    /// @note The new text IDs is from all text ID that passed as #translate() function argument in programs.
+    /// @note This function can help you to easy get the all text ID that need to translate.
+    /// @attention Make sure to call this function after you already call all #translate() function,
+    /// if not you will get incomplete text IDs list.
     void updateTranslationFiles() const
     {
         using Json = nlohmann::json;
@@ -320,7 +334,7 @@ public:
             {
                 j = Json::parse(ifs);
                 ifs.close();
-                std::map<std::string, std::string> map;
+                std::map<std::string, std::string> map; // For sorting.
                 for (const auto& textId : textIds_)
                     j.contains(textId) ? map.insert({ textId, j[textId] }) : map.insert({ textId, "" });
 
@@ -354,15 +368,19 @@ public:
         if (!hasLanguage(languageId))
             throw std::runtime_error("Language ID not found: " + languageId);
 
+    #ifndef EASY_TRANSLATION_RELEASE
         bool isFirst = currentLanguageId_.empty();
+    #endif // !EASY_TRANSLATION_RELEASE
         currentLanguageId_ = languageId;
         translations_ = TranslationList::fromJsonFile(languages_.translationListFile(languageId));
 
+    #ifndef EASY_TRANSLATION_RELEASE
         if (isFirst)
         {
             for (const auto& var : translations_.translations_)
                 textIds_.insert(var.first);
         }
+    #endif // !EASY_TRANSLATION_RELEASE
     }
 
     size_t languageCount() const { return languages_.count(); }
@@ -400,9 +418,18 @@ private:
 
 inline TranslateManager& getTranslateManager() { return TranslateManager::getInstance(); }
 
+/// @brief Get the translation text of the given text ID.
+/// @param textId The text ID.
+/// @return The translated text.
+/// @note If the given text ID doesn't exist in the current language, return the text ID itself.
 inline const char* tr(const std::string& textId) { return getTranslateManager().translate(textId); }
 
 #ifndef EASY_TRANSLATION_RELEASE
+/// @brief Update the translation files by add new text IDs and a empty translation.
+/// @note The new text IDs is from all text ID that passed as #translate() function argument in programs.
+/// @note This function can help you to easy get the all text ID that need to translate.
+/// @attention Make sure to call this function after you already call all #translate() function,
+/// if not you will get incomplete text IDs list.
 inline void updateTranslationFiles() { getTranslateManager().updateTranslationFiles(); }
 #endif // !EASY_TRANSLATION_RELEASE
 
@@ -414,6 +441,8 @@ inline void setLanguageList(const LanguageList& list) { getTranslateManager().se
 /// @param filename The file name of the language list.
 inline void setLanguageList(const std::string& filename) { getTranslateManager().setLanguageList(filename); }
 
+/// @brief Set the current language.
+/// @param languageId The language ID.
 inline void setLanguage(const std::string& languageId) { getTranslateManager().setLanguage(languageId); }
 
 inline size_t languageCount() { return getTranslateManager().languageCount(); }
