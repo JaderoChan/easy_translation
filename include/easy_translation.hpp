@@ -310,23 +310,24 @@ public:
         {
             std::string filename = languages_.translationListFile(languageId);
             std::ifstream ifs(filename);
+            Json j;
             if (!ifs.is_open())
-                throw std::runtime_error("Can't open the file: " + filename);
-
-            Json j = Json::parse(ifs);
-            ifs.close();
-            std::map<std::string, std::string> map;
-            for (const auto& textId : textIds_)
             {
-                if (j.contains(textId))
-                    map.insert({ textId, j[textId] });
-                else
-                    map.insert({ textId, "" });
+                for (const auto& textId : textIds_)
+                    j[textId] = "";
             }
+            else
+            {
+                j = Json::parse(ifs);
+                ifs.close();
+                std::map<std::string, std::string> map;
+                for (const auto& textId : textIds_)
+                    j.contains(textId) ? map.insert({ textId, j[textId] }) : map.insert({ textId, "" });
 
-            j.clear();
-            for (const auto& var : map)
-                j[var.first] = var.second;
+                j.clear();
+                for (const auto& var : map)
+                    j[var.first] = var.second;
+            }
 
             std::ofstream ofs(filename);
             if (!ofs.is_open())
