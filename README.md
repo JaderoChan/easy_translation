@@ -1,5 +1,5 @@
 # Easy Translation!
 
-## Dependency
+## Dependency Libs
 
 [Nlohmann/Json](https://github.com/nlohmann/json)
