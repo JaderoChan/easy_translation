@@ -310,14 +310,19 @@ public:
         textIds_.insert(textId);
         return translations_.translationText(textId);
     }
+#endif // EASY_TRANSLATION_RELEASE
 
     /// @brief Update the translation files by add new text IDs and a empty translation.
     /// @note The new text IDs is from all text ID that passed as #translate() function argument in programs.
     /// @note This function can help you to easy get the all text ID that need to translate.
     /// @attention Make sure to call this function after you already call all #translate() function,
     /// if not you will get incomplete text IDs list.
+    /// @attention This function is not effect when define the macro #EASY_TRANSLATION_RELEASE.
     void updateTranslationFiles() const
     {
+    #ifdef EASY_TRANSLATION_RELEASE
+        return;
+    #else
         using Json = nlohmann::json;
 
         for (const auto& languageId : languages_.languageIds())
@@ -350,8 +355,8 @@ public:
             ofs << j.dump(4);
             ofs.close();
         }
+    #endif // EASY_TRANSLATION_RELEASE
     }
-#endif // EASY_TRANSLATION_RELEASE
 
     /// @brief Set the language list.
     /// @param list The language list.
@@ -424,14 +429,13 @@ inline TranslateManager& getTranslateManager() { return TranslateManager::getIns
 /// @note If the given text ID doesn't exist in the current language, return the text ID itself.
 inline const char* tr(const std::string& textId) { return getTranslateManager().translate(textId); }
 
-#ifndef EASY_TRANSLATION_RELEASE
 /// @brief Update the translation files by add new text IDs and a empty translation.
 /// @note The new text IDs is from all text ID that passed as #translate() function argument in programs.
 /// @note This function can help you to easy get the all text ID that need to translate.
 /// @attention Make sure to call this function after you already call all #translate() function,
 /// if not you will get incomplete text IDs list.
+/// @attention This function is not effect when define the macro #EASY_TRANSLATION_RELEASE.
 inline void updateTranslationFiles() { getTranslateManager().updateTranslationFiles(); }
-#endif // !EASY_TRANSLATION_RELEASE
 
 /// @brief Set the language list.
 /// @param list The language list.
