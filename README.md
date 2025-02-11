@@ -1,1 +1,5 @@
-# easy_translation
+# Easy Translation!
+
+## Dependency
+
+[Nlohmann/Json](https://github.com/nlohmann/json)
