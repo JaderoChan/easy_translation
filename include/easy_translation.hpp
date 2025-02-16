@@ -20,6 +20,8 @@
 
 #include <nlohmann/json.hpp>    // json
 
+/// @attention Don't use the json with comments.
+
 /// @brief Define this macro to enable release mode, for better performance.
 /// @note If you not define this macro, the #TranslaeManager::translate() function will store
 /// all the translation text IDs in memory used for possible update the translation files.
@@ -76,20 +78,30 @@ public:
 
     /// @brief Load the language list from a json string.
     /// @param json The json string of the language list.
+    /// @attention If the json is invalid, the language list will be empty.
     static LanguageList fromJson(const std::string& json)
     {
         using Json = nlohmann::json;
 
-        std::map<std::string, std::string> list;
-        Json j = Json::parse(json);
-        for (const auto& var : j.items())
-            list.insert({ var.key(), var.value() });
+        try
+        {
+            Json j = Json::parse(json);
+            std::map<std::string, std::string> list;
+            for (const auto& var : j.items())
+                list.insert({ var.key(), var.value() });
 
-        return LanguageList(list);
+            return LanguageList(list);
+        }
+        catch (const std::exception& e)
+        {
+            return LanguageList();
+        }
+
     }
 
     /// @brief Load the language list from a json file.
     /// @param filename The file name of the language list json file.
+    /// @attention If the json is invalid, the language list will be empty.
     static LanguageList fromJsonFile(const std::string& filename)
     {
         using Json = nlohmann::json;
@@ -98,13 +110,21 @@ public:
         if (!ifs.is_open())
             throw std::runtime_error("Can't open the file: " + filename);
 
-        std::map<std::string, std::string> list;
-        Json j = Json::parse(ifs);
-        ifs.close();
-        for (const auto& var : j.items())
-            list.insert({ var.key(), var.value() });
+        try
+        {
+            std::map<std::string, std::string> list;
+            Json j = Json::parse(ifs);
+            ifs.close();
+            for (const auto& var : j.items())
+                list.insert({ var.key(), var.value() });
 
-        return LanguageList(list);
+            return LanguageList(list);
+        }
+        catch (const std::exception& e)
+        {
+            ifs.close();
+            return LanguageList();
+        }
     }
 
     /// @brief Get the translation list file of the given language.
@@ -189,20 +209,29 @@ public:
 
     /// @brief Load the translation list from a json string.
     /// @param json The json string of the translation list.
+    /// @attention If the json is invalid, the translation list will be empty.
     static TranslationList fromJson(const std::string& json)
     {
         using Json = nlohmann::json;
 
-        std::map<std::string, std::string> list;
-        Json j = Json::parse(json);
-        for (const auto& var : j.items())
-            list.insert({ var.key(), var.value() });
+        try
+        {
+            std::map<std::string, std::string> list;
+            Json j = Json::parse(json);
+            for (const auto& var : j.items())
+                list.insert({ var.key(), var.value() });
 
-        return TranslationList(list);
+            return TranslationList(list);
+        }
+        catch (const std::exception& e)
+        {
+            return TranslationList();
+        }
     }
 
     /// @brief Load the translation list from a json file.
     /// @param filename The file name of the translation list json file.
+    /// @attention If the json is invalid, the translation list will be empty.
     static TranslationList fromJsonFile(const std::string& filename)
     {
         using Json = nlohmann::json;
@@ -211,13 +240,21 @@ public:
         if (!ifs.is_open())
             throw std::runtime_error("Can't open the file: " + filename);
 
-        std::map<std::string, std::string> list;
-        Json j = Json::parse(ifs);
-        ifs.close();
-        for (const auto& var : j.items())
-            list.insert({ var.key(), var.value() });
+        try
+        {
+            std::map<std::string, std::string> list;
+            Json j = Json::parse(ifs);
+            ifs.close();
+            for (const auto& var : j.items())
+                list.insert({ var.key(), var.value() });
 
-        return TranslationList(list);
+            return TranslationList(list);
+        }
+        catch (const std::exception& e)
+        {
+            ifs.close();
+            return TranslationList();
+        }
     }
 
     /// @brief Get the translation text of the given text ID.
@@ -337,15 +374,24 @@ public:
             }
             else
             {
-                j = Json::parse(ifs);
-                ifs.close();
-                std::map<std::string, std::string> map; // For sorting.
-                for (const auto& textId : textIds_)
-                    j.contains(textId) ? map.insert({ textId, j[textId] }) : map.insert({ textId, "" });
+                try
+                {
+                    j = Json::parse(ifs);
+                    std::map<std::string, std::string> map; // For sorting.
+                    for (const auto& textId : textIds_)
+                        j.contains(textId) ? map.insert({ textId, j[textId] }) : map.insert({ textId, "" });
 
-                j.clear();
-                for (const auto& var : map)
-                    j[var.first] = var.second;
+                    j.clear();
+                    for (const auto& var : map)
+                        j[var.first] = var.second;
+                }
+                catch (const std::exception& e)
+                {
+                    for (const auto& textId : textIds_)
+                        j[textId] = "";
+                }
+
+                ifs.close();
             }
 
             std::ofstream ofs(filename);
