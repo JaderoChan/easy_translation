@@ -83,20 +83,15 @@ public:
     {
         using Json = nlohmann::json;
 
-        try
-        {
-            Json j = Json::parse(json);
-            std::map<std::string, std::string> list;
-            for (const auto& var : j.items())
-                list.insert({ var.key(), var.value() });
-
-            return LanguageList(list);
-        }
-        catch (const std::exception& e)
-        {
+        Json j = Json::parse(json, nullptr, false, true);
+        if (j.is_discarded())
             return LanguageList();
-        }
 
+        std::map<std::string, std::string> list;
+        for (const auto& var : j.items())
+            list.insert({ var.key(), var.value() });
+
+        return LanguageList(list);
     }
 
     /// @brief Load the language list from a json file.
@@ -108,22 +103,22 @@ public:
 
         std::ifstream ifs(filename);
         if (!ifs.is_open())
-            throw std::runtime_error("Can't open the file: " + filename);
+            return LanguageList();
 
-        try
+        Json j = Json::parse(ifs, nullptr, false, true);
+        if (j.is_discarded())
+        {
+            ifs.close();
+            return LanguageList();
+        }
+        else
         {
             std::map<std::string, std::string> list;
-            Json j = Json::parse(ifs);
             ifs.close();
             for (const auto& var : j.items())
                 list.insert({ var.key(), var.value() });
 
             return LanguageList(list);
-        }
-        catch (const std::exception& e)
-        {
-            ifs.close();
-            return LanguageList();
         }
     }
 
@@ -175,10 +170,8 @@ public:
     /// @note If the given language id already exists, do nothing.
     void add(const std::string& languageId, const std::string& translationListFile)
     {
-        if (has(languageId))
-            return;
-
-        languages_.insert({ languageId, translationListFile });
+        if (!has(languageId))
+            languages_.insert({ languageId, translationListFile });
     }
 
     /// @brief Remove a language.
@@ -214,19 +207,15 @@ public:
     {
         using Json = nlohmann::json;
 
-        try
-        {
-            std::map<std::string, std::string> list;
-            Json j = Json::parse(json);
-            for (const auto& var : j.items())
-                list.insert({ var.key(), var.value() });
-
-            return TranslationList(list);
-        }
-        catch (const std::exception& e)
-        {
+        Json j = Json::parse(json, nullptr, false, true);
+        if (j.is_discarded())
             return TranslationList();
-        }
+
+        std::map<std::string, std::string> list;
+        for (const auto& var : j.items())
+            list.insert({ var.key(), var.value() });
+
+        return TranslationList(list);
     }
 
     /// @brief Load the translation list from a json file.
@@ -238,22 +227,22 @@ public:
 
         std::ifstream ifs(filename);
         if (!ifs.is_open())
-            throw std::runtime_error("Can't open the file: " + filename);
+            return TranslationList();
 
-        try
+        Json j = Json::parse(ifs, nullptr, false, true);
+        if (j.is_discarded())
+        {
+            ifs.close();
+            return TranslationList();
+        }
+        else
         {
             std::map<std::string, std::string> list;
-            Json j = Json::parse(ifs);
             ifs.close();
             for (const auto& var : j.items())
                 list.insert({ var.key(), var.value() });
 
             return TranslationList(list);
-        }
-        catch (const std::exception& e)
-        {
-            ifs.close();
-            return TranslationList();
         }
     }
 
@@ -301,10 +290,8 @@ public:
     /// @note If the given text ID already exists, do nothing.
     void add(const std::string& textId, const std::string& text)
     {
-        if (has(textId))
-            return;
-
-        translations_.insert({ textId, text });
+        if (!has(textId))
+            translations_.insert({ textId, text });
     }
 
     /// @brief Remove a translation.
@@ -349,7 +336,7 @@ public:
     }
 #endif // EASY_TRANSLATION_RELEASE
 
-    /// @brief Update the translation files by add new text IDs and a empty translation.
+    /// @brief Update the translation files, add pairs of new text IDs and empty translation text.
     /// @note The new text IDs is from all text ID that passed as #translate() function argument in programs.
     /// @note This function can help you to easy get the all text ID that need to translate.
     /// @attention Make sure to call this function after you already call all #translate() function,
@@ -374,9 +361,14 @@ public:
             }
             else
             {
-                try
+                j = Json::parse(ifs, nullptr, false, true);
+                if (j.is_discarded())
                 {
-                    j = Json::parse(ifs);
+                    for (const auto& textId : textIds_)
+                        j[textId] = "";
+                }
+                else
+                {
                     std::map<std::string, std::string> map; // For sorting.
                     for (const auto& textId : textIds_)
                         j.contains(textId) ? map.insert({ textId, j[textId] }) : map.insert({ textId, "" });
@@ -384,11 +376,6 @@ public:
                     j.clear();
                     for (const auto& var : map)
                         j[var.first] = var.second;
-                }
-                catch (const std::exception& e)
-                {
-                    for (const auto& textId : textIds_)
-                        j[textId] = "";
                 }
 
                 ifs.close();
