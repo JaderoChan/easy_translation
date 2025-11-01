@@ -148,7 +148,7 @@ public:
 
     /// @brief Write the language list to a json file.
     /// @param filename The file name of the language list.
-    void write(const std::string& filename = "languages.json") const
+    void write(const std::string& filename = "language.json") const
     {
         using Json = nlohmann::json;
 
