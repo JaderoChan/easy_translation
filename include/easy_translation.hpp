@@ -364,6 +364,7 @@ public:
                 j = Json::parse(ifs, nullptr, false, true);
                 if (j.is_discarded())
                 {
+                    j = Json();
                     for (const auto& textId : textIds_)
                         j[textId] = "";
                 }
