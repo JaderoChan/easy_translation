@@ -1,4 +1,4 @@
-# Easy Translate!
+# Easy Translate
 
 ## Dependency Libs
 
