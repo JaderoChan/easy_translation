@@ -160,12 +160,12 @@ public:
 
     /// @brief Add a pair of language ID and Translations filename.
     /// @param languageId The language ID.
-    /// @param translationListFile The filename of the Translations file.
+    /// @param translationsFilename The filename of the Translations file.
     /// @note If the given language ID already exists, do nothing.
-    void add(const std::string& languageId, const std::string& translationListFile)
+    void add(const std::string& languageId, const std::string& translationsFilename)
     {
         if (!has(languageId))
-            languages_.insert({ languageId, translationListFile });
+            languages_.insert({ languageId, translationsFilename });
     }
 
     /// @brief Remove a language.
@@ -186,13 +186,13 @@ class Translations
 public:
     Translations() = default;
 
-    Translations(const std::vector<std::pair<std::string, std::string>>& list)
+    Translations(const std::vector<std::pair<std::string, std::string>>& trans)
     {
-        for (const auto& var : list)
+        for (const auto& var : trans)
             translations_.insert({ var.first, var.second });
     }
 
-    Translations(const std::map<std::string, std::string>& list) : translations_(list) {}
+    Translations(const std::map<std::string, std::string>& trans) : translations_(trans) {}
 
     /// @brief Load the Translations from a json string.
     /// @param json The json string of the Translations.
@@ -277,12 +277,12 @@ public:
 
     /// @brief Add a pair of text ID and translation text.
     /// @param textId The text ID.
-    /// @param text The translation text.
+    /// @param translation The translation text.
     /// @note If the given text ID already exists, do nothing.
-    void add(const std::string& textId, const std::string& text)
+    void add(const std::string& textId, const std::string& translation)
     {
         if (!has(textId))
-            translations_.insert({ textId, text });
+            translations_.insert({ textId, translation });
     }
 
     /// @brief Remove a translation.
@@ -445,46 +445,46 @@ private:
 
 // For convenience.
 
-inline TranslateManager& getTranslationManager() { return TranslateManager::getInstance(); }
+inline TranslateManager& getTranslateManager() { return TranslateManager::getInstance(); }
 
 /// @brief Get the translation text via the given text ID.
-    /// @param textId The text ID.
-    /// @return The translated text.
-    /// @note If the given text ID is not exist in the current language, return the text ID itself.
-inline const char* tr(const std::string& textId) { return getTranslationManager().translate(textId); }
+/// @param textId The text ID.
+/// @return The translated text.
+/// @note If the given text ID is not exist in the current language, return the text ID itself.
+inline const char* tr(const std::string& textId) { return getTranslateManager().translate(textId); }
 
 /// @brief Update the Translations files, add pairs of new text IDs and empty translation text.
-    /// @note The new text IDs is from all text ID that passed as #translate() function argument in programs.
-    /// @note This function can help you to easy get the all text ID that need to translate.
-    /// @attention Make sure to call this function after you already call all #translate() function,
-    /// if not you will get incomplete text IDs list.
-    /// @attention This function is not effect when define the macro #EASY_TRANSLATE_RELEASE.
-inline void updateTranslationsFiles() { getTranslationManager().updateTranslationsFiles(); }
+/// @note The new text IDs is from all text ID that passed as #translate() function argument in programs.
+/// @note This function can help you to easy get the all text ID that need to translate.
+/// @attention Make sure to call this function after you already call all #translate() function,
+/// if not you will get incomplete text IDs list.
+/// @attention This function is not effect when define the macro #EASY_TRANSLATE_RELEASE.
+inline void updateTranslationsFiles() { getTranslateManager().updateTranslationsFiles(); }
 
 /// @brief Set the Languages.
-inline void setLanguages(const Languages& list) { getTranslationManager().setLanguages(list); }
+inline void setLanguages(const Languages& langs) { getTranslateManager().setLanguages(langs); }
 
 /// @brief Set the Languages from a json file.
 /// @param filename The filename of the Languages file.
-inline void setLanguages(const std::string& filename) { getTranslationManager().setLanguages(filename); }
+inline void setLanguages(const std::string& filename) { getTranslateManager().setLanguages(filename); }
 
 /// @brief Set the current language.
 /// @param languageId The language ID.
-inline void setLanguage(const std::string& languageId) { getTranslationManager().setLanguage(languageId); }
+inline void setLanguage(const std::string& languageId) { getTranslateManager().setLanguage(languageId); }
 
-inline size_t languageCount() { return getTranslationManager().languageCount(); }
+inline size_t languageCount() { return getTranslateManager().languageCount(); }
 
-inline bool hasLanguage(const std::string& languageId) { return getTranslationManager().hasLanguage(languageId); }
+inline bool hasLanguage(const std::string& languageId) { return getTranslateManager().hasLanguage(languageId); }
 
-inline bool hasTranslation(const std::string& textId) { return getTranslationManager().hasTranslation(textId); }
+inline bool hasTranslation(const std::string& textId) { return getTranslateManager().hasTranslation(textId); }
 
-inline const char* currentLanguageId() { return getTranslationManager().currentLanguageId(); }
+inline const char* currentLanguageId() { return getTranslateManager().currentLanguageId(); }
 
-inline std::vector<std::string> allLanguageId() { return getTranslationManager().allLanguageId(); }
+inline std::vector<std::string> allLanguageId() { return getTranslateManager().allLanguageId(); }
 
-inline const Languages& languages() { return getTranslationManager().languages(); }
+inline const Languages& languages() { return getTranslateManager().languages(); }
 
-inline const Translations& translations() { return getTranslationManager().translations(); }
+inline const Translations& translations() { return getTranslateManager().translations(); }
 
 } // namespace easytr
 
