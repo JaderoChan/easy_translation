@@ -229,7 +229,7 @@ public:
             ifs.close();
             return Translations();
         }
-        
+
         std::map<std::string, std::string> list;
         ifs.close();
         for (const auto& var : j.items())
