@@ -29,14 +29,6 @@
 //   - Return the translation corresponding given text ID.
 #define EASYTR(x) easytr::tr(x)
 
-// - Languages
-//   - Language ID : Translations filename
-//   - ...
-//
-// - Translations
-//   - Text ID : Translation
-//   -...
-
 // The following is a sample directory structure and content structure for language files:
 //
 // - language.json (Language list)
@@ -55,6 +47,14 @@
 //   - App.Title  (Text ID) : 轻松翻译 (Translation)
 //   - App.Author (Text ID) : 頔珞     (Translation)
 //   - ...
+
+// - Languages
+//   - Language ID : Translations filename
+//   - ...
+//
+// - Translations
+//   - Text ID : Translation
+//   -...
 
 namespace easytr
 {
