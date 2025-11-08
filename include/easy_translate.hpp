@@ -135,12 +135,12 @@ public:
     { return languages_.find(languageId) != languages_.end(); }
 
     /// @brief Get all `Language ID`s.
-    std::vector<std::string> languageIds() const
+    std::vector<std::string> ids() const
     {
-        std::vector<std::string> ids;
+        std::vector<std::string> ret;
         for (const auto& var : languages_)
-            ids.push_back(var.first);
-        return ids;
+            ret.push_back(var.first);
+        return ret;
     }
 
     /// @brief Write the `Languages` to a json file.
@@ -261,12 +261,12 @@ public:
     { return translations_.find(textId) != translations_.end(); }
 
     /// @brief Get all `Text ID`s
-    std::vector<std::string> textIds() const
+    std::vector<std::string> ids() const
     {
-        std::vector<std::string> ids;
+        std::vector<std::string> ret;
         for (const auto& var : translations_)
-            ids.push_back(var.first);
-        return ids;
+            ret.push_back(var.first);
+        return ret;
     }
 
     /// @brief Write the `Translations` to a json file.
@@ -353,7 +353,7 @@ public:
         using Json = nlohmann::json;
 
         size_t ret = 0;
-        for (const auto& languageId : languages_.languageIds())
+        for (const auto& languageId : languages_.ids())
         {
             std::string filename = languages_.translationsFilename(languageId);
             std::ifstream ifs(filename);
