@@ -19,8 +19,8 @@
 
 #include <nlohmann/json.hpp>    // json
 
-/// @brief Define this macro to enable easytr::updateTranslationsFiles function.
-/// @note If you define this macro, the easytr::TranslateManager::translate function will store
+/// @brief Define this macro to enable easytr::updateTranslationsFiles() function.
+/// @note If you define this macro, the easytr::TranslateManager::translate() function will store
 /// all `Text ID` to memory used for possible update the `Translations file`s.
 // #define EASY_TRANSLATE_DUMP_TEXTID
 
@@ -340,9 +340,9 @@ public:
 
     /// @brief Update all `Translations file`s. (add pairs of the new `Text ID` and empty `Translation text`)
     /// @return The number of updated files.
-    /// @note The new `Text ID` is from all `Text ID` that passed as #translate function argument in programs.
+    /// @note The new `Text ID` is from all `Text ID` that passed as #translate() function argument in programs.
     /// @note This function can help you to easy get the all `Text ID` that need to translate.
-    /// @attention Make sure to call this function after you already call all #translate function,
+    /// @attention Make sure to call this function after you already call all #translate() function,
     /// if not you will get incomplete `Text ID` list.
     /// @attention This function is not effect when undefine the macro \ref EASY_TRANSLATE_DUMP_TEXTID.
     size_t updateTranslationsFiles() const
@@ -477,9 +477,9 @@ inline const char* tr(const std::string& textId)
 
 /// @brief Update all `Translations file`s. (add pairs of the new `Text ID` and empty `Translation text`)
 /// @return The number of updated files.
-/// @note The new `Text ID` is from all `Text ID` that passed as #translate function argument in programs.
+/// @note The new `Text ID` is from all `Text ID` that passed as #translate() function argument in programs.
 /// @note This function can help you to easy get the all `Text ID` that need to translate.
-/// @attention Make sure to call this function after you already call all #translate function,
+/// @attention Make sure to call this function after you already call all #translate() function,
 /// if not you will get incomplete `Text ID` list.
 /// @attention This function is not effect when undefine the macro \ref EASY_TRANSLATE_DUMP_TEXTID.
 inline size_t updateTranslationsFiles()
