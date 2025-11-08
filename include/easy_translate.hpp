@@ -128,7 +128,7 @@ public:
     size_t count() const { return languages_.size(); }
 
     /// @brief Check whether has not any `Language ID`.
-    bool isEmpty() const { return count() == 0; }
+    bool empty() const { return count() == 0; }
 
     /// @brief Check whether exists the given `Language ID`.
     bool has(const std::string& languageId) const
@@ -254,7 +254,7 @@ public:
     size_t count() const { return translations_.size(); }
 
     /// @brief Check whether has not any `Text ID`.
-    bool isEmpty() const { return count() == 0; }
+    bool empty() const { return count() == 0; }
 
     /// @brief Check whether exists the given `Text ID`.
     bool has(const std::string& textId) const
