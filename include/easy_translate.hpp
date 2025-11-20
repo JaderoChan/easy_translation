@@ -311,7 +311,7 @@ private:
     std::map<std::string, std::string> translations_;
 };
 
-// Singleton class.
+// Singleton class
 class TranslateManager
 {
 public:
@@ -374,7 +374,7 @@ public:
                 }
                 else
                 {
-                    std::map<std::string, std::string> map; // For sort.
+                    std::map<std::string, std::string> map; // For sort
                     for (const auto& textId : textIds_)
                         j.contains(textId) ? map.insert({ textId, j[textId] }) : map.insert({ textId, "" });
 
@@ -465,7 +465,7 @@ private:
     Translations translations_;
 };
 
-// For convenience.
+// For convenience
 
 inline TranslateManager& getTranslateManager()
 { return TranslateManager::getInstance(); }
