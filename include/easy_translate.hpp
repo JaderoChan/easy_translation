@@ -121,7 +121,7 @@ public:
     }
 
     /// @brief Get the `Translations filename` of the given `Language ID`.
-    std::string translationsFilename(const std::string& languageId) const
+    std::string at(const std::string& languageId) const
     { return languages_.at(languageId); }
 
     /// @brief Get the number of the `Language ID`.
@@ -135,7 +135,7 @@ public:
     { return languages_.find(languageId) != languages_.end(); }
 
     /// @brief Get all `Language ID`s.
-    std::vector<std::string> ids() const
+    std::vector<std::string> getIds() const
     {
         std::vector<std::string> ids;
         for (const auto& var : languages_)
@@ -243,7 +243,7 @@ public:
 
     /// @brief Get the `Translation text` of the given `Text ID`.
     /// @note If the given `Text ID` is not exist, return the `Text ID` itself.
-    const char* translationText(const std::string& textId) const
+    const char* at(const std::string& textId) const
     {
         if (!has(textId))
             return textId.c_str();
@@ -261,7 +261,7 @@ public:
     { return translations_.find(textId) != translations_.end(); }
 
     /// @brief Get all `Text ID`s
-    std::vector<std::string> ids() const
+    std::vector<std::string> getIds() const
     {
         std::vector<std::string> ids;
         for (const auto& var : translations_)
@@ -326,7 +326,7 @@ public:
 #ifndef EASY_TRANSLATE_DUMP_TEXTID
     const char* translate(const std::string& textId) const
     {
-        return translations_.translationText(textId);
+        return translations_.at(textId);
     }
 #else
     /// @brief Get the `Translation text` of the given `Text ID` on current language.
@@ -334,7 +334,7 @@ public:
     const char* translate(const std::string& textId)
     {
         textIds_.insert(textId);
-        return translations_.translationText(textId);
+        return translations_.at(textId);
     }
 #endif // EASY_TRANSLATE_DUMP_TEXTID
 
@@ -353,9 +353,9 @@ public:
         using Json = nlohmann::json;
 
         size_t updated = 0;
-        for (const auto& languageId : languages_.ids())
+        for (const auto& languageId : languages_.getIds())
         {
-            std::string filename = languages_.translationsFilename(languageId);
+            std::string filename = languages_.at(languageId);
             std::ifstream ifs(filename);
             Json j;
             if (!ifs.is_open())
@@ -416,7 +416,7 @@ public:
         bool isFirst = currentLanguage_.empty();
     #endif // !EASY_TRANSLATE_DUMP_TEXTID
         currentLanguage_ = languageId;
-        translations_ = Translations::fromFile(languages_.translationsFilename(languageId));
+        translations_ = Translations::fromFile(languages_.at(languageId));
 
     #ifdef EASY_TRANSLATE_DUMP_TEXTID
         if (isFirst)
