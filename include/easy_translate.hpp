@@ -137,10 +137,10 @@ public:
     /// @brief Get all `Language ID`s.
     std::vector<std::string> ids() const
     {
-        std::vector<std::string> ret;
+        std::vector<std::string> ids;
         for (const auto& var : languages_)
-            ret.push_back(var.first);
-        return ret;
+            ids.push_back(var.first);
+        return ids;
     }
 
     /// @brief Write the `Languages` to a json file.
@@ -263,10 +263,10 @@ public:
     /// @brief Get all `Text ID`s
     std::vector<std::string> ids() const
     {
-        std::vector<std::string> ret;
+        std::vector<std::string> ids;
         for (const auto& var : translations_)
-            ret.push_back(var.first);
-        return ret;
+            ids.push_back(var.first);
+        return ids;
     }
 
     /// @brief Write the `Translations` to a json file.
@@ -352,7 +352,7 @@ public:
     #else
         using Json = nlohmann::json;
 
-        size_t ret = 0;
+        size_t updated = 0;
         for (const auto& languageId : languages_.ids())
         {
             std::string filename = languages_.translationsFilename(languageId);
@@ -392,10 +392,10 @@ public:
 
             ofs << j.dump(4);
             ofs.close();
-            ret++;
+            updated++;
         }
 
-        return ret;
+        return updated;
     #endif // EASY_TRANSLATE_DUMP_TEXTID
     }
 
