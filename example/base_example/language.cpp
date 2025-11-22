@@ -22,8 +22,8 @@ QString getLanguageIdStr(LanguageID langId)
 
 void setLanguage(LanguageID langId)
 {
-    bool res = easytr::changeLanguage(getLanguageIdStr(langId).toStdString());
-    if (!res)
+    bool ret = easytr::changeLanguage(getLanguageIdStr(langId).toStdString());
+    if (!ret)
     {
         qDebug() << "Failed to change the language to: " << getLanguageIdStr(langId);
         return;

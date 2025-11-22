@@ -17,9 +17,9 @@ int main(int argc, char* argv[])
     MainWidget w;
     w.show();
 
-    int res = a.exec();
+    int ret = a.exec();
 
     easytr::updateTranslationsFiles();
 
-    return res;
+    return ret;
 }
