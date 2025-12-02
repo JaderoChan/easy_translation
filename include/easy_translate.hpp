@@ -3,7 +3,7 @@
 // Webs: https://github.com/JaderoChan/easy_translate
 // You can contact me by email: c_dl_cn@outlook.com
 
-// GPL-3.0 License
+// MIT License
 //
 // Copyright (c) 2024 頔珞JaderoChan
 
