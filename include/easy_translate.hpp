@@ -340,11 +340,11 @@ public:
 
     /// @brief Update all `Translations file`s. (add pairs of the new `Text ID` and empty `Translation text`)
     /// @return The number of updated files.
-    /// @note The new `Text ID` is from all `Text ID` that passed as #translate() function argument in programs.
-    /// @note This function can help you to easy get the all `Text ID` that need to translate.
-    /// @attention Make sure to call this function after you already call all #translate() function,
+    /// @note - The new `Text ID` is from all `Text ID` that passed as #translate() function argument in programs.
+    /// @note - This function can help you to easy get the all `Text ID` that need to translate.
+    /// @attention - Make sure to call this function after you already call all #translate() function,
     /// if not you will get incomplete `Text ID` list.
-    /// @attention This function is not effect when undefine the macro \ref EASY_TRANSLATE_DUMP_TEXTID.
+    /// @attention - This function is not effect when undefine the macro \ref EASY_TRANSLATE_DUMP_TEXTID.
     size_t updateTranslationsFiles() const
     {
     #ifndef EASY_TRANSLATE_DUMP_TEXTID
@@ -477,11 +477,11 @@ inline const char* tr(const std::string& textId)
 
 /// @brief Update all `Translations file`s. (add pairs of the new `Text ID` and empty `Translation text`)
 /// @return The number of updated files.
-/// @note The new `Text ID` is from all `Text ID` that passed as #tr() function argument in programs.
-/// @note This function can help you to easy get the all `Text ID` that need to translate.
-/// @attention Make sure to call this function after you already call all #tr() function,
+/// @note - The new `Text ID` is from all `Text ID` that passed as #tr() function argument in programs.
+/// @note - This function can help you to easy get the all `Text ID` that need to translate.
+/// @attention - Make sure to call this function after you already call all #tr() function,
 /// if not you will get incomplete `Text ID` list.
-/// @attention This function is not effect when undefine the macro \ref EASY_TRANSLATE_DUMP_TEXTID.
+/// @attention - This function is not effect when undefine the macro \ref EASY_TRANSLATE_DUMP_TEXTID.
 inline size_t updateTranslationsFiles()
 { return getTranslateManager().updateTranslationsFiles(); }
 
