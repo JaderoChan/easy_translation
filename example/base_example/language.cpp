@@ -22,10 +22,10 @@ QString getLanguageIdStr(LanguageID langId)
 
 void setLanguage(LanguageID langId)
 {
-    bool ret = easytr::changeLanguage(getLanguageIdStr(langId).toStdString());
+    bool ret = easytr::setCurrentLanguage(getLanguageIdStr(langId).toStdString());
     if (!ret)
     {
-        qDebug() << "Failed to change the language to: " << getLanguageIdStr(langId);
+        qDebug() << "Failed to set the current language to: " << getLanguageIdStr(langId);
         return;
     }
     gCurrentLanguage = langId;
