@@ -143,8 +143,8 @@ public:
     }
 
     /// @brief Get the `Translations filename` of the given `Language ID`.
-    std::string at(const std::string& languageId) const
-    { return languages_.at(languageId); }
+    const char* at(const std::string& languageId) const
+    { return languages_.at(languageId).c_str(); }
 
     /// @brief Get the number of the `Language ID`.
     size_t count() const { return languages_.size(); }
