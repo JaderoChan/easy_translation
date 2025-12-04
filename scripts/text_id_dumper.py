@@ -22,7 +22,7 @@ for file in files:
     print(f"Processing file: {file}, {i+1}/{len(files)}")
     with open(file, "r", encoding="utf-8", errors="ignore") as f:
         for line in f:
-            result = re.search(f"{flag}\(\"(.*)\"\)", line)
+            result = re.search(f"{flag}(\"(.*)\")", line)
             if result:
                 textId = result.group(1)
                 text_ids.update({textId: ""})
