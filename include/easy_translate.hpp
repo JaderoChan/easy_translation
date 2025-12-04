@@ -121,21 +121,23 @@ public:
         return Languages(list);
     }
 
+    /// @brief Get the json string.
+    std::string toJson() const
+    {
+        nlohmann::json j;
+        for (const auto& var : languages_)
+            j[var.first] = var.second;
+        return j.dump(4);
+    }
+
     /// @brief Write the `Languages` to a json file.
     /// @return If the failed to write the file return false else return true.
     bool toFile(const std::string& filename = "languages.json") const
     {
-        using Json = nlohmann::json;
-
-        Json j;
-        for (const auto& var : languages_)
-            j[var.first] = var.second;
-
         std::ofstream ofs(filename);
         if (!ofs.is_open())
             return false;
-
-        ofs << j.dump(4);
+        ofs << toJson();
         ofs.close();
         return true;
     }
@@ -242,21 +244,23 @@ public:
         return Translations(list);
     }
 
+    /// @brief Get the json string.
+    std::string toJson() const
+    {
+        nlohmann::json j;
+        for (const auto& var : translations_)
+            j[var.first] = var.second;
+        return j.dump(4);
+    }
+
     /// @brief Write the `Translations` to a json file.
     /// @return If the failed to write the file return false else return true.
     bool toFile(const std::string& filename) const
     {
-        using Json = nlohmann::json;
-
-        Json j;
-        for (const auto& var : translations_)
-            j[var.first] = var.second;
-
         std::ofstream ofs(filename);
         if (!ofs.is_open())
             return false;
-
-        ofs << j.dump(4);
+        ofs << toJson();
         ofs.close();
         return true;
     }
