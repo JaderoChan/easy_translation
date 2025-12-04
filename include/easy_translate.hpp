@@ -27,7 +27,7 @@
 // - Translate function
 //   - Usage: EASYTR("Text ID")
 //   - Return the `Translation text` corresponding given `Text ID`.
-#define EASYTR(x) easytr::tr(x)
+#define EASYTR(x) easytr::translate(x)
 
 // The following is a sample directory structure and content structure for
 // the `Languages file` and `Translations file`:
