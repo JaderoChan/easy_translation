@@ -21,12 +21,12 @@
 
 /// @brief Define this macro to enable easytr::updateTranslationsFiles() function.
 /// @note If you define this macro, the easytr::TranslateManager::translate() function will store
-/// all `Text ID` to memory used for possible update the `Translations file`s.
+/// all `Translation ID` to memory used for possible update the `Translations file`s.
 // #define EASY_TRANSLATE_DUMP_TEXTID
 
 // - Translate function
-//   - Usage: EASYTR("Text ID")
-//   - Return the `Translation text` corresponding given `Text ID`.
+//   - Usage: EASYTR("Translation ID")
+//   - Return the `Translation text` corresponding given `Translation ID`.
 #define EASYTR(x) easytr::translate(x)
 
 // The following is a sample directory structure and content structure for
@@ -40,13 +40,13 @@
 //   - fr_FR (Language ID) : fr_FR.json (Translations filename)
 //
 // - en_US.json (Translations file)
-//   - App.Title  (Text ID) : Easy Translation (Translation text)
-//   - App.Author (Text ID) : JaderoChan       (Translation text)
+//   - App.Title  (Translation ID) : Easy Translation (Translation text)
+//   - App.Author (Translation ID) : JaderoChan       (Translation text)
 //   - ...
 //
 // - zh_CN.json
-//   - App.Title  (Text ID) : 轻松翻译 (Translation text)
-//   - App.Author (Text ID) : 頔珞     (Translation text)
+//   - App.Title  (Translation ID) : 轻松翻译 (Translation text)
+//   - App.Author (Translation ID) : 頔珞     (Translation text)
 //   - ...
 
 // - Languages
@@ -54,7 +54,7 @@
 //   - ...
 //
 // - Translations
-//   - Text ID : Translation text
+//   - Translation ID : Translation text
 //   -...
 
 // Note:
@@ -265,26 +265,26 @@ public:
         return true;
     }
 
-    /// @brief Get the `Translation text` of the given `Text ID`.
-    /// @note If the given `Text ID` is not exist, return the `Text ID` itself.
-    const char* at(const std::string& textId) const
+    /// @brief Get the `Translation text` of the given `Translation ID`.
+    /// @note If the given `Translation ID` is not exist, return the `Translation ID` itself.
+    const char* at(const std::string& tranId) const
     {
-        if (!has(textId))
-            return textId.c_str();
-        return translations_.at(textId).c_str();
+        if (!has(tranId))
+            return tranId.c_str();
+        return translations_.at(tranId).c_str();
     }
 
-    /// @brief Get the number of the `Text ID`.
+    /// @brief Get the number of the `Translation ID`.
     size_t count() const { return translations_.size(); }
 
-    /// @brief Check whether has not any `Text ID`.
+    /// @brief Check whether has not any `Translation ID`.
     bool empty() const { return count() == 0; }
 
-    /// @brief Check whether exists the given `Text ID`.
-    bool has(const std::string& textId) const
-    { return translations_.find(textId) != translations_.end(); }
+    /// @brief Check whether exists the given `Translation ID`.
+    bool has(const std::string& tranId) const
+    { return translations_.find(tranId) != translations_.end(); }
 
-    /// @brief Get all `Text ID`s
+    /// @brief Get all `Translation ID`s
     std::vector<std::string> getIds() const
     {
         std::vector<std::string> ids;
@@ -293,26 +293,26 @@ public:
         return ids;
     }
 
-    /// @brief Add a pair of the `Text ID` and `Translation text`.
-    /// @note If the given `Text ID` already exists, do nothing.
-    void add(const std::string& textId, const std::string& translation)
+    /// @brief Add a pair of the `Translation ID` and `Translation text`.
+    /// @note If the given `Translation ID` already exists, do nothing.
+    void add(const std::string& tranId, const std::string& translation)
     {
-        if (!has(textId))
-            translations_.insert({ textId, translation });
+        if (!has(tranId))
+            translations_.insert({ tranId, translation });
     }
 
-    /// @brief Remove a `Text ID` and it corresponding `Translation text`.
-    void remove(const std::string& textId)
+    /// @brief Remove a `Translation ID` and it corresponding `Translation text`.
+    void remove(const std::string& tranId)
     {
-        if (has(textId))
-            translations_.erase(textId);
+        if (has(tranId))
+            translations_.erase(tranId);
     }
 
-    /// @brief Remove all `Text ID`s and it corresponding `Translation text`s.
+    /// @brief Remove all `Translation ID`s and it corresponding `Translation text`s.
     void clear() { translations_.clear(); }
 
 private:
-    // {Text ID : Translation text}
+    // {Translation ID : Translation text}
     std::map<std::string, std::string> translations_;
 };
 
@@ -326,20 +326,20 @@ public:
         return instance;
     }
 
-    /// @brief Get the `Translation text` of the given `Text ID` on current language.
-    /// @note If the given `Text ID` is not exist on the current language, return the `Text ID` itself.
+    /// @brief Get the `Translation text` of the given `Translation ID` on current language.
+    /// @note If the given `Translation ID` is not exist on the current language, return the `Translation ID` itself.
 #ifndef EASY_TRANSLATE_DUMP_TEXTID
-    const char* translate(const std::string& textId) const
+    const char* translate(const std::string& tranId) const
     {
-        return translations_.at(textId);
+        return translations_.at(tranId);
     }
 #else
-    /// @brief Get the `Translation text` of the given `Text ID` on current language.
-    /// @note If the given `Text ID` is not exist on the current language, return the `Text ID` itself.
-    const char* translate(const std::string& textId)
+    /// @brief Get the `Translation text` of the given `Translation ID` on current language.
+    /// @note If the given `Translation ID` is not exist on the current language, return the `Translation ID` itself.
+    const char* translate(const std::string& tranId)
     {
-        textIds_.insert(textId);
-        return translations_.at(textId);
+        tranIds_.insert(tranId);
+        return translations_.at(tranId);
     }
 #endif // EASY_TRANSLATE_DUMP_TEXTID
 
@@ -369,7 +369,7 @@ public:
         if (isFirst)
         {
             for (const auto& var : translations_.translations_)
-                textIds_.insert(var.first);
+                tranIds_.insert(var.first);
         }
     #endif // !EASY_TRANSLATE_DUMP_TEXTID
 
@@ -383,21 +383,21 @@ public:
     /// @brief Get the number of the `Language ID`.
     size_t languageCount() const { return languages_.count(); }
 
-    /// @brief Get the number of the `Text ID` on current language.
-    size_t textCount() const { return translations_.count(); }
+    /// @brief Get the number of the `Translation ID` on current language.
+    size_t translationCount() const { return translations_.count(); }
 
     /// @brief Check whether exists the given `Language ID`.
     bool hasLanguage(const std::string& languageId) const { return languages_.has(languageId); }
 
-    /// @brief Check whether exists the given `Text ID`.
-    bool hasText(const std::string& textId) const { return translations_.has(textId); }
+    /// @brief Check whether exists the given `Translation ID`.
+    bool hasTranslation(const std::string& tranId) const { return translations_.has(tranId); }
 
-    /// @brief Update all `Translations file`s. (add pairs of the new `Text ID` and empty `Translation text`)
+    /// @brief Update all `Translations file`s. (add pairs of the new `Translation ID` and empty `Translation text`)
     /// @return The number of updated files.
-    /// @note - The new `Text ID` is from all `Text ID` that passed as #translate() function argument in programs.
-    /// @note - This function can help you to easy get the all `Text ID` that need to translate.
+    /// @note - The new `Translation ID` is from all `Translation ID` that passed as #translate() function argument in programs.
+    /// @note - This function can help you to easy get the all `Translation ID` that need to translate.
     /// @attention - Make sure to call this function after you already call all #translate() function,
-    /// if not you will get incomplete `Text ID` list.
+    /// if not you will get incomplete `Translation ID` list.
     /// @attention - This function is not effect when undefine the macro \ref EASY_TRANSLATE_DUMP_TEXTID.
     size_t updateTranslationsFiles() const
     {
@@ -414,8 +414,8 @@ public:
             Json j;
             if (!ifs.is_open())
             {
-                for (const auto& textId : textIds_)
-                    j[textId] = "";
+                for (const auto& tranId : tranIds_)
+                    j[tranId] = "";
             }
             else
             {
@@ -423,14 +423,14 @@ public:
                 if (j.is_discarded())
                 {
                     j = Json();
-                    for (const auto& textId : textIds_)
-                        j[textId] = "";
+                    for (const auto& tranId : tranIds_)
+                        j[tranId] = "";
                 }
                 else
                 {
                     std::map<std::string, std::string> map; // For sort
-                    for (const auto& textId : textIds_)
-                        j.contains(textId) ? map.insert({ textId, j[textId] }) : map.insert({ textId, "" });
+                    for (const auto& tranId : tranIds_)
+                        j.contains(tranId) ? map.insert({ tranId, j[tranId] }) : map.insert({ tranId, "" });
 
                     j.clear();
                     for (const auto& var : map)
@@ -463,7 +463,7 @@ private:
     TranslateManager& operator=(const TranslateManager&) = delete;
 
 #ifdef EASY_TRANSLATE_DUMP_TEXTID
-    std::set<std::string> textIds_;
+    std::set<std::string> tranIds_;
 #endif // !EASY_TRANSLATE_DUMP_TEXTID
     std::string currentLanguage_;
     Languages languages_;
@@ -475,10 +475,10 @@ private:
 inline TranslateManager& getTranslateManager()
 { return TranslateManager::getInstance(); }
 
-/// @brief Get the `Translation text` of the given `Text ID` on current language.
-/// @note If the given `Text ID` is not exist on the current language, return the `Text ID` itself.
-inline const char* translate(const std::string& textId)
-{ return getTranslateManager().translate(textId); }
+/// @brief Get the `Translation text` of the given `Translation ID` on current language.
+/// @note If the given `Translation ID` is not exist on the current language, return the `Translation ID` itself.
+inline const char* translate(const std::string& tranId)
+{ return getTranslateManager().translate(tranId); }
 
 /// @brief Set the `Languages`.
 inline void setLanguages(const Languages& langs)
@@ -500,17 +500,17 @@ inline bool setCurrentLanguage(const std::string& languageId)
 inline size_t languageCount()
 { return getTranslateManager().languageCount(); }
 
-/// @brief Get the number of the `Text ID` on current language.
-inline size_t textCount()
-{ return getTranslateManager().textCount(); }
+/// @brief Get the number of the `Translation ID` on current language.
+inline size_t translationCount()
+{ return getTranslateManager().translationCount(); }
 
 /// @brief Check whether exists the given `Language ID`.
 inline bool hasLanguage(const std::string& languageId)
 { return getTranslateManager().hasLanguage(languageId); }
 
-/// @brief Check whether exists the given `Text ID`.
-inline bool hasText(const std::string& textId)
-{ return getTranslateManager().hasText(textId); }
+/// @brief Check whether exists the given `Translation ID`.
+inline bool hasTranslation(const std::string& tranId)
+{ return getTranslateManager().hasTranslation(tranId); }
 
 inline const Languages& languages()
 { return getTranslateManager().languages(); }
@@ -518,12 +518,12 @@ inline const Languages& languages()
 inline const Translations& translations()
 { return getTranslateManager().translations(); }
 
-/// @brief Update all `Translations file`s. (add pairs of the new `Text ID` and empty `Translation text`)
+/// @brief Update all `Translations file`s. (add pairs of the new `Translation ID` and empty `Translation text`)
 /// @return The number of updated files.
-/// @note - The new `Text ID` is from all `Text ID` that passed as #tr() function argument in programs.
-/// @note - This function can help you to easy get the all `Text ID` that need to translate.
+/// @note - The new `Translation ID` is from all `Translation ID` that passed as #tr() function argument in programs.
+/// @note - This function can help you to easy get the all `Translation ID` that need to translate.
 /// @attention - Make sure to call this function after you already call all #tr() function,
-/// if not you will get incomplete `Text ID` list.
+/// if not you will get incomplete `Translation ID` list.
 /// @attention - This function is not effect when undefine the macro \ref EASY_TRANSLATE_DUMP_TEXTID.
 inline size_t updateTranslationsFiles()
 { return getTranslateManager().updateTranslationsFiles(); }
