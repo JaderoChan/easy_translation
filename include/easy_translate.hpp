@@ -24,36 +24,37 @@
 /// all `Translation ID` to memory used for possible update the `Translations file`s.
 // #define EASY_TRANSLATE_DUMP_TEXTID
 
-// - Translate function
+// Translate function
 //   - Usage: EASYTR("Translation ID")
-//   - Return the `Translation text` corresponding given `Translation ID`.
+//   - Get the `Translation text` of the given `Translation ID` on current language.
+//   - If the given `Translation ID` is not exist on the current language, return the `Translation ID` itself.
 #define EASYTR(x) easytr::translate(x)
 
 // The following is a sample directory structure and content structure for
 // the `Languages file` and `Translations file`:
 //
-// - languages.json (Languages file)
+// languages.json (Languages file)
 //   - en_US (Language ID) : en_US.json (Translations filename)
 //   - zh_CN (Language ID) : zh_CN.json (Translations filename)
 //   - ...
 //   - ja_JP (Language ID) : ja_JP.json (Translations filename)
 //   - fr_FR (Language ID) : fr_FR.json (Translations filename)
 //
-// - en_US.json (Translations file)
+// en_US.json (Translations file)
 //   - App.Title  (Translation ID) : Easy Translation (Translation text)
 //   - App.Author (Translation ID) : JaderoChan       (Translation text)
 //   - ...
 //
-// - zh_CN.json
+// zh_CN.json
 //   - App.Title  (Translation ID) : 轻松翻译 (Translation text)
 //   - App.Author (Translation ID) : 頔珞     (Translation text)
 //   - ...
 
-// - Languages
+// Languages
 //   - Language ID : Translations filename
 //   - ...
 //
-// - Translations
+// Translations
 //   - Translation ID : Translation text
 //   -...
 
