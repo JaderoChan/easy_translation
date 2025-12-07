@@ -37,8 +37,5 @@ set_target_properties(
     WIN32_EXECUTABLE TRUE
 )
 
-if(NOT CMAKE_INSTALL_PREFIX)
-    set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/install)
-endif()
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
 install(DIRECTORY language DESTINATION bin)
