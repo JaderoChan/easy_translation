@@ -19,15 +19,6 @@ set(PROJECT_SOURCE ${SRC} ${UI})
 qt_standard_project_setup()
 qt_add_executable(${PROJECT_NAME} ${PROJECT_SOURCE})
 
-include(FetchContent)
-FetchContent_Declare(
-    json
-    GIT_REPOSITORY https://github.com/nlohmann/json
-    GIT_TAG master
-)
-FetchContent_MakeAvailable(json)
-target_include_directories(${PROJECT_NAME} PRIVATE ${json_SOURCE_DIR}/include)
-
 target_include_directories(
     ${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/../../include
