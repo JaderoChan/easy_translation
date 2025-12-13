@@ -22,7 +22,7 @@
 /// @brief Define this macro to enable easytr::updateTranslationsFiles() function.
 /// @note If you define this macro, the easytr::TranslateManager::translate() function will store
 /// all `Translation ID` to memory used for possible update the `Translations file`s.
-// #define EASY_TRANSLATE_DUMP_TEXTID
+// #define EASY_TRANSLATE_UPDATE_TRANSLATIONS_FILES
 
 // Translate function
 //   - Usage: EASYTR("Translation ID")
@@ -329,7 +329,7 @@ public:
 
     /// @brief Get the `Translation text` of the given `Translation ID` on current language.
     /// @note If the given `Translation ID` is not exist on the current language, return the `Translation ID` itself.
-#ifndef EASY_TRANSLATE_DUMP_TEXTID
+#ifndef EASY_TRANSLATE_UPDATE_TRANSLATIONS_FILES
     const char* translate(const std::string& tranId) const
     {
         return translations_.at(tranId);
@@ -342,7 +342,7 @@ public:
         tranIds_.insert(tranId);
         return translations_.at(tranId);
     }
-#endif // EASY_TRANSLATE_DUMP_TEXTID
+#endif // EASY_TRANSLATE_UPDATE_TRANSLATIONS_FILES
 
     /// @brief Set the `Languages`.
     void setLanguages(const Languages& languages) { languages_ = languages; }
@@ -360,19 +360,19 @@ public:
         if (!hasLanguage(languageId))
             return false;
 
-    #ifdef EASY_TRANSLATE_DUMP_TEXTID
+    #ifdef EASY_TRANSLATE_UPDATE_TRANSLATIONS_FILES
         bool isFirst = currentLanguage_.empty();
-    #endif // !EASY_TRANSLATE_DUMP_TEXTID
+    #endif // !EASY_TRANSLATE_UPDATE_TRANSLATIONS_FILES
         currentLanguage_ = languageId;
         translations_ = Translations::fromFile(languages_.at(languageId));
 
-    #ifdef EASY_TRANSLATE_DUMP_TEXTID
+    #ifdef EASY_TRANSLATE_UPDATE_TRANSLATIONS_FILES
         if (isFirst)
         {
             for (const auto& var : translations_.translations_)
                 tranIds_.insert(var.first);
         }
-    #endif // !EASY_TRANSLATE_DUMP_TEXTID
+    #endif // !EASY_TRANSLATE_UPDATE_TRANSLATIONS_FILES
 
         return true;
     }
@@ -399,10 +399,10 @@ public:
     /// @note - This function can help you to easy get the all `Translation ID` that need to translate.
     /// @attention - Make sure to call this function after you already call all #translate() function,
     /// if not you will get incomplete `Translation ID` list.
-    /// @attention - This function is not effect when undefine the macro \ref EASY_TRANSLATE_DUMP_TEXTID.
+    /// @attention - This function is not effect when undefine the macro \ref EASY_TRANSLATE_UPDATE_TRANSLATIONS_FILES.
     size_t updateTranslationsFiles() const
     {
-    #ifndef EASY_TRANSLATE_DUMP_TEXTID
+    #ifndef EASY_TRANSLATE_UPDATE_TRANSLATIONS_FILES
         return 0;
     #else
         using Json = nlohmann::json;
@@ -451,7 +451,7 @@ public:
         }
 
         return updated;
-    #endif // EASY_TRANSLATE_DUMP_TEXTID
+    #endif // EASY_TRANSLATE_UPDATE_TRANSLATIONS_FILES
     }
 
 private:
@@ -463,9 +463,9 @@ private:
 
     TranslateManager& operator=(const TranslateManager&) = delete;
 
-#ifdef EASY_TRANSLATE_DUMP_TEXTID
+#ifdef EASY_TRANSLATE_UPDATE_TRANSLATIONS_FILES
     std::set<std::string> tranIds_;
-#endif // !EASY_TRANSLATE_DUMP_TEXTID
+#endif // !EASY_TRANSLATE_UPDATE_TRANSLATIONS_FILES
     std::string currentLanguage_;
     Languages languages_;
     Translations translations_;
@@ -525,7 +525,7 @@ inline const Translations& translations()
 /// @note - This function can help you to easy get the all `Translation ID` that need to translate.
 /// @attention - Make sure to call this function after you already call all #tr() function,
 /// if not you will get incomplete `Translation ID` list.
-/// @attention - This function is not effect when undefine the macro \ref EASY_TRANSLATE_DUMP_TEXTID.
+/// @attention - This function is not effect when undefine the macro \ref EASY_TRANSLATE_UPDATE_TRANSLATIONS_FILES.
 inline size_t updateTranslationsFiles()
 { return getTranslateManager().updateTranslationsFiles(); }
 
