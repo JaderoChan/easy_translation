@@ -47,9 +47,9 @@
 
 故可以在程序主循环结束后调用`updateTranslationsFiles`来更新译文ID，这会在译文文件中新增一个键值对，其中键被设置为新发现的译文ID，值（译文）被设置为空字符串，并对译文ID重排序。
 
-使用`updateTranslationsFiles`时必须定义`EASY_TRANSLATE_DUMP_TEXTID`宏，否则不做任何事情。
+使用`updateTranslationsFiles`时必须定义`EASY_TRANSLATE_UPDATE_TRANSLATIONS_FILES`宏，否则不做任何事情。
 
-在定义`EASY_TRANSLATE_DUMP_TEXTID`宏时，内部会对每一个读取到的译文ID进行存储，以便在调用`updateTranslationsFiles`时对译文文件进行更新，故此时会消耗额外性能。正确的做法应该是在需要提取译文ID时才定义`EASY_TRANSLATE_DUMP_TEXTID`宏。
+在定义`EASY_TRANSLATE_UPDATE_TRANSLATIONS_FILES`宏时，内部会对每一个读取到的译文ID进行存储，以便在调用`updateTranslationsFiles`时对译文文件进行更新，故此时会消耗额外性能。正确的做法应该是在需要提取译文ID时才定义`EASY_TRANSLATE_UPDATE_TRANSLATIONS_FILES`宏。
 
 ## 示例
 
