@@ -24,6 +24,7 @@ target_include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/../../include
     ${CMAKE_CURRENT_SOURCE_DIR}/../../3rdparty/json/include
 )
+
 target_link_libraries(
     ${PROJECT_NAME} PRIVATE
     Qt${QT_VERSION_MAJOR}::Widgets
