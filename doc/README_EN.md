@@ -4,7 +4,7 @@
 
 ## Introduction
 
-This is a mini-library that helps you quickly handle program translation, written in C++11.
+This is a mini library that can help you quickly complete the UI text translation of GUI application, written in C++11.
 
 ## Features
 
