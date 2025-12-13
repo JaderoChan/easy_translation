@@ -24,12 +24,21 @@ target_include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/../../include
     ${CMAKE_CURRENT_SOURCE_DIR}/../../3rdparty/json/include
 )
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(
+    ${PROJECT_NAME} PRIVATE
+    Qt${QT_VERSION_MAJOR}::Widgets
+)
+
 set_target_properties(
     ${PROJECT_NAME} PROPERTIES
     AUTOMOC ON
     AUTOUIC ON
     WIN32_EXECUTABLE TRUE
+)
+
+target_compile_definitions()(
+    ${PROJECT_NAME} PRIVATE
+    $<$<CONFIG:Debug>:EASY_TRANSLATE_UPDATE_TRANSLATIONS_FILES>
 )
 
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
