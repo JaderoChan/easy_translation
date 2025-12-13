@@ -36,7 +36,7 @@ set_target_properties(
     WIN32_EXECUTABLE TRUE
 )
 
-target_compile_definitions()(
+target_compile_definitions(
     ${PROJECT_NAME} PRIVATE
     $<$<CONFIG:Debug>:EASY_TRANSLATE_UPDATE_TRANSLATIONS_FILES>
 )
